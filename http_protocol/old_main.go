@@ -83,3 +83,71 @@ func main() {
 	// * use fmt.printf when printing to stdout => format strings %s, %v etc.
 	// * & fmt.Println => insert space betwn args, & \n char at the end
 }
+
+// ------------------------------------------------------------------------------------------------
+// task 3: removing new line and printing out proper statements
+package main
+
+import (
+	"fmt"
+	"io"
+	"os"
+	"log"
+	"bytes"
+)
+
+func main() {
+	filename := "messages.txt"
+	f, err := os.Open(filename)
+	if (err != nil) {
+		// fmt.Fprintln(os.Stderr, "open:", err)
+		log.Fatal() // can potentially cause resource leaks; only use this when resources have not been claimed yet i.e. here when the socket was not opened successfully
+		// use log.Fatal as it does these 3 things:
+			// 1. formats the messages => concatenate
+			// 2. writes to stderr
+			// 3. terminates the program with exit code (1)
+			
+			// essentially it does:
+			// log.Print(...) // this also prints out to stderr
+			// os.Exit(1) // does not run deferred functions
+	}
+
+	defer f.Close()
+
+	// task 3: make the line readable => only break when a new line is encountered
+	buf := make([]byte, 8)
+	str := ""
+	for {
+		n, err := f.Read(buf)
+		
+		if n > 0 {
+			data := buf[:n]
+	
+			// read the line till the index of c that == \n
+			if i := bytes.IndexByte(data, '\n'); i != -1 { // short statement form => preferred as it narrows the scope
+				// when it finds an end of line
+				str += string(data[:i]) // not i+ 1 because we dont want newline
+				fmt.Printf("read: %s\n", str) // newline is added here
+				str = string(data[i+1:])
+			} else {
+				str += string(data) // no \n found
+			}
+			// i is not valid here anymore (outside of the scope of if-else condition)
+	
+		}
+
+		if err == io.EOF {
+			break
+		}
+		
+		if err != nil {
+			fmt.Printf("error encountered:", err) // here we use Printf becoz we want to ensure the deferred functions are called!
+			return
+		}
+	}
+
+	if len(str) != 0 {
+		fmt.Printf("read: %s\n", str)
+	}
+}
+// ------------------------------------------------------------------------------------------------

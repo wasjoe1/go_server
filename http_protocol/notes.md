@@ -1,4 +1,6 @@
 # Notes
+
+## Main Notes
 - why need init go module?
 1. define the module's identity
 2. manage dependencies for project
@@ -36,12 +38,73 @@
 - printing to stdout (concatenation & format)
     format: * use fmt.printf when printing to stdout => format strings %s, %v etc.
 	concatenation: * & fmt.Println => insert space betwn args, & \n char at concatenationend
-
 *UTH - under the hood
-## Miscellaneous notes/ fun facts
+
+- state machine
+defn: A state machine is a mathematical abstraction used to design algorithms.
+basically reads a set of inputs and changes to a different state, based on those inputs.
+https://developer.mozilla.org/en-US/docs/Glossary/State_machine
+
+- io.ReadCloser
+it is an interface from the GO standard library
+```go
+type ReadCloser interface {
+    Read(p []byte) (n int, err error)
+    Close() error
+}
+```
+
+- channels
+`chan string` => send & receive channel, carries string type data
+`<- chan string` => receive only channel, carries string type data; cant insert values to channel
+    allowed action: value := <- ch // blocks until value is able to receive
+`chan <- string` => send only channel, carries string type data; cant retrieve values from the channel
+    allowed action: ch <- value // send value to ch; blocks until the other side is ready to receive
+
+__unbuffered channels__:
+ch := make(chan string)
+Capacity = 0
+ch <- value
+* this means blocks until a receiver is ready, at most 1 value is stored (MEM usage constant)
+
+__Buffered channel__
+ch := make(chan string, 16)
+Capacity = 16
+Holds at most 16 strings => bounded memory with a small queue
+
+__[]string ?__
+why []string cant be used? wouldnt the exercise where we ingest data by chunks show that we can use string arrays initially and chunk them to not overrun the MEM?
+No.
+looking at this function `func getLines(f io.ReadCloser) []string`
+this means the entire string needs to be read into MEM
+whereas if we do `func getLines(f io.ReadCloser) <-chan string` the content can be buffered inside the channel first & block the socket from continuing to send us data
+
+__how to add data into receive-only channel & vice versa__
+chanel types are interpreted by the caller of the function, not inside the function it was created
+```go 
+func getLinesChannel(f io.ReadCloser) <-chan string {
+    ch := make(chan string) // channel creation, currently its bi directional
+        // you can send (ch <- value)
+        // you can receive (<-ch)
+        // you can close it
+    value := 3
+    ch <- value
+    return ch // GO implicitly converts `chan string` to `<-chan string`
+}
+```
+
+- IIFE
+```go
+// this defines an annonymous function and immediately executes it asynchronously
+go func() {
+    ...
+}()   // ← call
+```
+pattern is called an IIFE (Immediately Invoked Function Expression)
+
+## Miscellaneous Notes/ Fun Facts
 -  RFC (request for comments) - official technical doc that defines how the network protocol works
     - is a published doc by the IETF (internet engineering task force) => some org that standardises protocols that allow the internet to function LOL
-
 
 ### boot.dev cli installation
 - this course required me to download the boot.dev CLI to run the test cases against my local env (refer to github to install @ https://github.com/bootdotdev/bootdev?tab=readme-ov-file#installation)
