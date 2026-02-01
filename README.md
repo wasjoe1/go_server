@@ -32,3 +32,5 @@ I want to build this GO server for this reasons:
 - /http_protocol
     - Building a HTTP/1.1 server at the APP layer on top of the already existing TRANSPORT layer (TCP)
 - /http_server
+
+(notes.md => you will realise within each project folder, i like to have a notes.md. this was used to track my thought process/ things i found important/ or anything else to note. the notes.md in this overarching project folder is a consolidation of all my learning)
