@@ -279,7 +279,8 @@ func otherLearnings() {
 		a[0] = 10 // does NOT affect caller
 	}
 	
-	var slice []int
+	// slice
+	var slice []int // nil cap, len == cap == 0 (no backing array, no allocation) OR s := []int{1,2,3} // slice literal, len == cap == 3
 		// dynamic length
 		// internally, its a descriptor (struct): pointer, len, capacity
 		// passed by value, but points to shared backing array 
@@ -288,4 +289,57 @@ func otherLearnings() {
 	}
 
 	// * slice's pass by value is passing a copy of the slice header (ptr, len, cap)
+
+	// --------------------------------------------------------------
+	// slice (re-slicing & append)
+	// re-slicing
+	func f(s []int) {
+		s = s[:1] // changes local copy only => does not affect the caller
+	}
+	
+	// append
+	func f(s []int) {
+		s = append(s, 10)
+			// checks cap
+			// decides where to write
+			// MAYBE return a new slice => but it ALWAYS return a slice (new or old)
+	}
+	// * if len(s) < cap(s), room for append
+	// * if len(s) == cap(s), NO room for append; new backing array is allocated
+
+	// length & capacity; IMPT !!
+	// (from the above function where 10 is appended to s)
+	fmt.Println(len(s)) // 0
+	fmt.Println(s)      // []
+	// * this is because the length of the declared slice has length 0
+	// * when printing out elements of a slice, elements is only printed up till the length (in this case, 0 elements will be printed even though 10 was added to the backing array)
+	// ** LENGTH controls visibility, capacity controls groth **
+
+	len(s) // actually this prints out the length of the slice
+	s := make([]int, 1, 4)
+	len(s) // returns 1, not 0!! => its not the number of elements, its the length allocated to the slice
+
+	// best way to return slices; IMPT !!
+	func f(s []int) []int {
+		return append(s, 10)
+	}
+	s = f(s)
+	fmt.Println(len(s)) // 1
+	fmt.Println(s)      // [10]
+
+	// --------------------------------------------------------------
+	// array (append)
+	func f(s []int) {
+		s = append(s, 99)
+		fmt.Println("inside", s)
+	}
+	s := []int{1,2,3} // slice literal, len == cap == 3
+	f(s)
+	fmt.Println("outside", s)
+	// inside: [1 2 3 99]
+	// outside: [1 2 3] => 99 is not displayed as:
+		// - append allocates new array
+		// - local s within function now points to s
+		// - caller's s still points to the old array
+		// * impt to note that we are referring to different backing arrays now and not the slices anymore		
 }
