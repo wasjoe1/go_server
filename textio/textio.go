@@ -157,4 +157,135 @@ func main() {
 	// 5. (a) do all goroutines run on 1 thread? NO
 	// 	  (b) does each goroutine run on 1 thread? NO
 	// 		=> Go uses an (M:N) scheduler, where M # of goroutines multiplex on a much smaller num of N OS threads
+
+
+}
+
+// variable naming convention in go is to use: camelCase & PascalCase => refers to the Google GO style guide
+func otherLearnings() {
+	// CONTENT:
+	// arrary declaration
+	// for loop
+	// create dictionary
+	// create set
+
+	// --------------------------------------------------------------
+	// arrary declaration
+	nums := []int {1,2,3,4,5} // compared to C's int arr[n] = {1,2,3}
+
+	// --------------------------------------------------------------
+	// for loop
+	// both index & val
+	for i, v := range nums {
+		//smt
+	}
+	// just index
+	for i := range nums {
+		//smt nums[i]
+	}
+
+	// conceptually: a slice []T always returns 2 values => index && val
+	for index, value := range nums {...}
+	// for index := range nums {...} // by doing this, u are just ignoring the value & only using the index
+
+	// --------------------------------------------------------------
+	// create dictionary
+	m := make(map[string]int) // map(keyType)valueType
+	m["apple"] = 3
+	m["apple"] = 5
+	
+	// check if key exists
+	v, ok := m["apple"]
+	if ok {
+		fmt.Println(v)
+	}
+	// declare the dictionary & initialize values tgt
+	m := map[string]int{
+		"apple":  3,
+		"banana": 5,
+	}
+	
+	// --------------------------------------------------------------
+	// create set
+	// just like creating a dictionary, but the vals are empty
+	set := make(map[int]struct{}) // value is struct type
+	set[10] = struct{}{}
+	set[20] = struct{}{}
+	if _, exists := set[10]; exists {
+		fmt.Println("10 is in the set")
+	}
+	delete(set, 10) // to remove the key in the set
+
+	// struct{}{} takes 0 bytes && signals that only keys matter
+	// named structs also occupies 0 bytes if it has no fields => MEM occupied depends on fields
+
+	// declaring a named struct (Person in this case)
+	type Person struct {
+		Name string
+		Age int
+	}
+	// declaring an annoymous struct
+	p := struct { // declare
+		X int
+		Y int
+	}{ // & initialize
+		X: 10,
+		Y: 20,
+	}
+	// no name, cannt have methods, used for: 1-off data grouping, tests, short lived local structures
+
+	// * GO has no classes!
+	// so `struct{}{}` returns an empty annonymous struct
+	// nil? XX NO XX => not a type, it represents 0 value for certain type: pointers, maps etc.
+	// * there is no 1 liner to convert an "arr" in to a set like in python; idiomatic way is to use for loop
+
+	// --------------------------------------------------------------
+	// sorting in go
+	sort.Ints(nums) // nums is []int type; func Ints(x []int)
+
+	var a [5]int
+	sort.Ints(a) // ❌ compile error
+	sort.Ints(a[:]) // must slice it => WORKS
+
+	// other sorting: string, floats, etc.
+	sort.Ints([]int)
+	sort.Strings([]string)
+	sort.Float64s([]float64)
+
+	// custom sorting
+	type Person struct {
+		Name string
+		Age  int
+	}
+
+	people := []Person{
+		{"Alice", 30},
+		{"Bob", 25},
+	}
+
+	sort.Slice(people, func(i, j int) bool {
+		return people[i].Age < people[j].Age
+	})
+
+
+	// --------------------------------------------------------------
+	// slice & array in go
+	//array
+	var array [5]int
+		// fixed size
+		// size is part of type => [5]int != [6]int
+		// pass by val => entire array is copied
+	func f(a [5]int) {
+		a[0] = 10 // does NOT affect caller
+	}
+	
+	var slice []int
+		// dynamic length
+		// internally, its a descriptor (struct): pointer, len, capacity
+		// passed by value, but points to shared backing array 
+	func f(s []int) {
+		s[0] = 10 // DOES affect caller
+	}
+
+	// * slice's pass by value is passing a copy of the slice header (ptr, len, cap)
 }
