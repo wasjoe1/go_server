@@ -85,8 +85,8 @@ chanel types are interpreted by the caller of the function, not inside the funct
 func getLinesChannel(f io.ReadCloser) <-chan string {
     ch := make(chan string) // channel creation, currently its bi directional
         // you can send (ch <- value)
-        // you can receive (<-ch)
-        // you can close it
+        // you can receive (val := <-ch)
+        // you can close it 
     value := 3
     ch <- value
     return ch // GO implicitly converts `chan string` to `<-chan string`
