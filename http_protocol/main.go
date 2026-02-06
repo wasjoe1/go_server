@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"io"
-	// "os" not required anymore since we stop reading from a file
 	"log"
 	"bytes"
 	"net" // to set up TCP conn
@@ -36,7 +34,7 @@ func getLinesChannel(f io.ReadCloser) <-chan string {
 			}
 			// Random error
 			if err != nil {
-				fmt.Printf("error encountered:", err)
+				log.Printf("error encountered:", err)
 				return
 			}
 		}
@@ -52,7 +50,7 @@ func getLinesChannel(f io.ReadCloser) <-chan string {
 
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	fmt.Println("Connection has been accepted")
+	log.Println("Connection has been accepted")
 }
 
 func main() {
@@ -71,7 +69,7 @@ func main() {
 		}
 
 		for line := range getLinesChannel(conn) {
-			fmt.Printf("read: %s\n", line)
+			log.Printf("read: %s\n", line)
 		}
 		// go handleConnection(conn) // temp code for future abstraction
 	}

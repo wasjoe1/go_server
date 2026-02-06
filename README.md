@@ -20,7 +20,6 @@ I want to build this GO server for this reasons:
     => I also did not know if what i created was the industry standard as i was alrady using python to write it
     (whos not to say that the way i implemented the async coroutines might not have been the best way to)
 
-
 ## Resources
 - https://www.youtube.com/watch?v=FknTw9bJsXM <= was inspired to do this because of this youtube video by the 1 and only PrimeAgen
 - https://www.boot.dev/courses/learn-http-protocol-golang
@@ -33,3 +32,12 @@ I want to build this GO server for this reasons:
     - Building a HTTP/1.1 server at the APP layer on top of the already existing TRANSPORT layer (TCP)
 
 (`notes.md` => you will realise within each project folder, i like to have a `notes.md`. this was used to track my thought process/ things i found important/ or anything else to note. the `notes.md` in this overarching project folder is a consolidation of all my learning)
+
+## Course content
+1. Streams (streaming data)
+2. TCP
+3. Requests
+4. Request lines
+5. HTTP headers
+6. HTTP body
+7. HTTP response

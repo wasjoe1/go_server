@@ -222,6 +222,23 @@ c = rc // NO, BAD => rc does not implement all rc's methods
     => THUS net.Conn implements io.ReadCloser interface
 * net.Conn is not literally an io.ReadCloser BUT it implements that interface so it can be passed anywhere a io.ReadCloser is required
 
+### log vs fmt
+- fmt => for formatting & user output
+    - no timestamps
+    - no metadata
+    - no concurrency guarantees
+    used for users, CLIs/ tools, tests/ debugging, etc.
+- log => for diagnostic output
+    - timestamped
+    - thread-safe
+    - centralized output dest.
+    - explicitly not user-facing
+    used for emit logs for devs, server-side code, debugging production behaviour
+
+* when writing GO server & you require logs to tri-age future issues, use log!!
+* for errors, GO does not havea special "error logging" mechanism (unlike python's log levels info, warn, error)
+    => the idiomatic way is to use log.Println("") // if required, write custom "[INFO]..." & "[ERROR]..." strings within the log statement
+
 ---------------------------------------------------------------------------------------------------
 ## Miscellaneous Notes/ Fun Facts
 -  RFC (request for comments) - official technical doc that defines how the network protocol works
