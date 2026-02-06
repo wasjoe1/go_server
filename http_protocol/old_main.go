@@ -151,3 +151,38 @@ func main() {
 	}
 }
 // ------------------------------------------------------------------------------------------------
+// task 4 refactor to read from connection instead of file
+func handleConnection(conn net.Conn) {
+	defer conn.Close()
+	fmt.Println("Connection has been accepted")
+}
+
+func main() {
+	// task 4: refactor to have a function that reads lines from a TCP connection
+	// filename := "messages.txt"
+	// f, err := os.Open(filename)
+	ln, err := net.Listen("tcp", ":42069")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	defer ln.Close() // leaving it here as you can see where u "close" ur resource and know that this would be safe
+	
+	// previous code for handling lines from a file:
+	// for line := range getLinesChannel(f) {
+	// 	fmt.Printf("read: %s\n", line) // print the line to stdout
+	// }
+
+	for {
+		conn, err := ln.Accept() // block until a connection is accepted
+		if err != nil {
+			log.Printf("Client connection error:", err) // dont use Fatal if not the currently opened socket will not be closed, causing resrc leak => program immediately terminates with os.Exit(1)
+			continue // should not crash the server
+		}
+
+		for line := range getLinesChannel(conn) { // take in conn instead of f
+			fmt.Printf("read: %s\n", line) // print the line to stdout
+		}
+		// go handleConnection(conn) // start an async goroutine that is immediately
+	}
+
+}
