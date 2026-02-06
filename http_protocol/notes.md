@@ -238,6 +238,7 @@ c = rc // NO, BAD => rc does not implement all rc's methods
 * when writing GO server & you require logs to tri-age future issues, use log!!
 * for errors, GO does not havea special "error logging" mechanism (unlike python's log levels info, warn, error)
     => the idiomatic way is to use log.Println("") // if required, write custom "[INFO]..." & "[ERROR]..." strings within the log statement
+https://chatgpt.com/share/6985ed28-5d94-800a-83ba-97115fddbaa4
 
 ---------------------------------------------------------------------------------------------------
 ## Miscellaneous Notes/ Fun Facts
