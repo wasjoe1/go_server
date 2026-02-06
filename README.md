@@ -8,7 +8,7 @@ and got my hands dirty in socket programming (mainly TCP + SSL layer).
 ## Why this project?
 There were a few things I could improve on this:
 - server was written in Python; performance was an issue (high memory & CPU usage)
-- APP layer was not covered => handled by the quickfix library to process app layer messages
+- APP layer was not covered(i.e. parsing of msg headers, status codes etc.) => handled by the quickfix library to process app layer messages
 - Unsure if what i wrote was industry standard
 
 I want to build this GO server for this reasons:
@@ -31,6 +31,5 @@ I want to build this GO server for this reasons:
     - a mini programming exercise to get myself familiar with the GO language (incomplete but i rather spend time getting familiar with the language via the server project)
 - /http_protocol
     - Building a HTTP/1.1 server at the APP layer on top of the already existing TRANSPORT layer (TCP)
-- /http_server
 
 (`notes.md` => you will realise within each project folder, i like to have a `notes.md`. this was used to track my thought process/ things i found important/ or anything else to note. the `notes.md` in this overarching project folder is a consolidation of all my learning)
